@@ -1,10 +1,10 @@
-include includes/header.pug
+include ../includes/header.pug
 main
   h1 Create your personal account 
-  form(action="/register", method="post")
+  form(action="/auth/register", method="post")
     input(type="email", name="mail", id="registerMail", placeholder="E-Mail", required)
     input(type="password", name="password", id="registerPW" placeholder="Password", required, autocomplete="new-password")
     input(type="submit", value="Register")
     input(type="reset", value="Reset")
   a(href="/") Back
-include includes/footer.pug
+include ../includes/footer.pug

@@ -25,13 +25,13 @@ class User {
    * @param {string} hash 
    * @param {number} iterations 
    */
-  constructor(mail, salt, hash, iterations) {
+  constructor(mail, salt, hash, iterations, created, updated) {
     this.mail = mail;
     this.salt = salt;
     this.hash = hash;
     this.iterations = iterations;
-    this.created = new Date().toISOString();
-    this.updated = new Date().toISOString();
+    this.created = created || new Date().toISOString();
+    this.updated = updated || new Date().toISOString();
   }
 
   /**
@@ -39,8 +39,9 @@ class User {
    * @param {string} passwordAttempt
    * @returns {bool}
    */
-  isPasswordCorrect(passwordAttempt) {
-    return this.hash == crypto.pbkdf2Sync(passwordAttempt, this.salt, this.iterations, 64, 'sha512');
+  validPassword(passwordAttempt) {
+    console.log("crypto", crypto.pbkdf2Sync(passwordAttempt, this.salt, this.iterations, 64, 'sha512').toString('hex'))
+    return this.hash == crypto.pbkdf2Sync(passwordAttempt, this.salt, this.iterations, 64, 'sha512').toString('hex');
   }
 }
 
@@ -61,23 +62,30 @@ function hashPassword(password) {
   };
 }
 
-// exports.search = (key, value, done) => {
-//   nano.request({ db: 'user',
-//     method: 'get',
-    
-//   }, (err, body) => {
-//     console.log('err', err);
-//     console.log('body', body);
-//     if (!err) {
-//       return done(null, body);
-//     }
-//     return done(err, body);
-//   });
-// }
+exports.search = (key, value, done) => {
+  console.log('key', key);
+  console.log('value', value);
+  nano.request({ db: 'user',
+    method: 'post',
+    path: '_find',
+    body: { 'selector': {
+      [key]: value }
+    }
+  }, (err, body) => {
+    console.log('err', err);
+    console.log('body', body);
+    if (!err) {
+      let user = body.docs[0];
+      user = new User(user.mail, user.salt, user.hash, user.iterations, user.created, user.updated);
+      return done(null, user);
+    }
+    return done(err, body);
+  });
+}
 
 exports.create = (mail, password) => {
   const crypt = hashPassword(password);
-  const newUser = new User(mail, crypt.salt, crypt.hash, crypt.iterations);
+  const newUser = new User(mail, crypt.salt, crypt.hash.toString('hex'), crypt.iterations);
 
   user.insert(newUser, (err, body) => {
     if (!err) {
