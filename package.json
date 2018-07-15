@@ -1,0 +1,28 @@
+{
+  "name": "MoWeSS18",
+  "version": "1.0.0",
+  "main": "app.js",
+  "repository": "https://github.com/d-holbach/MoWeSS18.git",
+  "author": "d-holbach <d.holbach@posteo.de>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "nano": "^6.4.4",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.3",
+    "request": "^2.87.0",
+    "shortid": "^2.2.12"
+  },
+  "devDependencies": {
+    "eslint": "^5.1.0",
+    "eslint-plugin-node": "^6.0.1",
+    "nodemon": "^1.18.2"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}

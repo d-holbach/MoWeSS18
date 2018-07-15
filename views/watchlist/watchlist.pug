@@ -1,0 +1,7 @@
+include ../includes/header.pug
+main
+  h1 Wachtlist: #{name}
+  ul
+    each val, index in movies
+      li= index + ': ' + val.title
+    include ../includes/footer.pug
