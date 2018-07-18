@@ -19,9 +19,14 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', passport.authenticate('local', { successRedirect: '/watchlist', 
-                                                    failureRedirect: '/',
-                                                    failureFlash: true,
-                                                    successFlash: true })
-                                                  );
+  failureRedirect: '/',
+  failureFlash: true,
+  successFlash: true })
+);
+
+router.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('../');
+});
 
 module.exports = router;

@@ -4,6 +4,14 @@ const crypto = require('crypto');
 const nano = require('nano')('http://'+process.env.DB_HOST+':'+process.env.DB_PORT+'');
 let user = nano.db.use('user');
 
+const options = {
+  'saltLen': 128,
+  'iterations': 25000,
+  'keyLen': 512,
+  'digestAlgorithm': 'sha512',
+  'encoding': 'hex'
+}
+
 nano.db.get('user', function(err, body) {
   if ( err && err.statusCode === 404 ) {
     nano.db.create('user', function(err) {
@@ -23,13 +31,11 @@ class User {
    * @param {string} mail 
    * @param {string} salt 
    * @param {string} hash 
-   * @param {number} iterations 
    */
   constructor(mail, salt, hash, iterations, created, updated) {
-    this.mail = mail;
+    this._id = mail;
     this.salt = salt;
     this.hash = hash;
-    this.iterations = iterations;
     this.created = created || new Date().toISOString();
     this.updated = updated || new Date().toISOString();
   }
@@ -40,8 +46,7 @@ class User {
    * @returns {bool}
    */
   validPassword(passwordAttempt) {
-    console.log("crypto", crypto.pbkdf2Sync(passwordAttempt, this.salt, this.iterations, 64, 'sha512').toString('hex'))
-    return this.hash == crypto.pbkdf2Sync(passwordAttempt, this.salt, this.iterations, 64, 'sha512').toString('hex');
+    return this.hash == crypto.pbkdf2Sync(passwordAttempt, this.salt, options.iterations, options.keyLen, options.digestAlgorithm).toString(options.encoding);
   }
 }
 
@@ -51,10 +56,10 @@ class User {
  * @returns {Object}
  */
 function hashPassword(password) {
-  var salt = crypto.randomBytes(128).toString('base64');
-  var iterations = 10000;
-  var hash = crypto.pbkdf2Sync(password, salt, iterations, 64, 'sha512');
-
+  var salt = crypto.randomBytes(options.saltLen).toString(options.encoding);
+  var hash = crypto.pbkdf2Sync(password, salt, options.iterations, options.keyLen, options.digestAlgorithm);
+  hash = hash.toString(options.encoding);
+  
   return {
       salt: salt,
       hash: hash,
@@ -63,8 +68,6 @@ function hashPassword(password) {
 }
 
 exports.search = (key, value, done) => {
-  console.log('key', key);
-  console.log('value', value);
   nano.request({ db: 'user',
     method: 'post',
     path: '_find',
@@ -72,20 +75,34 @@ exports.search = (key, value, done) => {
       [key]: value }
     }
   }, (err, body) => {
-    console.log('err', err);
-    console.log('body', body);
     if (!err) {
       let user = body.docs[0];
-      user = new User(user.mail, user.salt, user.hash, user.iterations, user.created, user.updated);
+      user = new User(user._id, user.salt, user.hash, user.iterations, user.created, user.updated);
       return done(null, user);
     }
     return done(err, body);
   });
 }
 
+exports.get = (mail, done) => {
+  user.get(mail, (err, body) => {
+    if (!err) {
+      let user = body.docs[0];
+      user = new User(user._id, user.salt, user.hash, user.iterations, user.created, user.updated);
+      return done(null, user);
+    }
+    return done(err, body);
+  });
+}
+
+/**
+ * @param {string} mail 
+ * @param {string} password 
+ * @returns {Object}
+ */
 exports.create = (mail, password) => {
   const crypt = hashPassword(password);
-  const newUser = new User(mail, crypt.salt, crypt.hash.toString('hex'), crypt.iterations);
+  const newUser = new User(mail, crypt.salt, crypt.hash);
 
   user.insert(newUser, (err, body) => {
     if (!err) {
