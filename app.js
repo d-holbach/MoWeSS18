@@ -43,6 +43,7 @@ passport.deserializeUser(function(user, done) {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ 
   secret: 'mowe18',
+  resave: false,
   saveUninitialized: false
 }));
 app.use(passport.initialize());

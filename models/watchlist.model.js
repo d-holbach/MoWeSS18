@@ -32,21 +32,32 @@ class Watchlist {
     movie.year = year;
     movie.img = img;
     movie.seen = seen || false;
-
+    this.updated = new Date().toISOString();
     this.movies.push(movie);
-  }
-
-  save() {
-
   }
 }
 
 exports.get = (id, done) => {
   watchlistDB.get(id, (err, body) => {
     if (!err) {
-      return done(body);
+      const watchlist = new Watchlist(body._id, body.name, body.movies, body.created, body.updated);
+      return done(null, watchlist);
     }
-    return done(err);
+    return done(err, body);
+  });
+}
+
+exports.update = (watchlist, done) => {
+  nano.request({
+    db: 'watchlist',
+    method: 'PUT',
+    path: watchlist._id,
+    body: watchlist
+  }, (err, body) => {
+    if (!err) {
+      return done(null, body);
+    }
+    return done(err, body)
   });
 }
 

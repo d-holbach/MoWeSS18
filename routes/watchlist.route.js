@@ -26,12 +26,13 @@ router.get('/:id', (req, res) => {
       res.status(400).send('Bad Request');
     }
     
-    Watchlist.get(id, (data) => {
-      if (data.statusCode === 404) {
+    Watchlist.get(id, (err, body) => {
+      if (err && body.statusCode === 404) {
         res.render('404', { title: '404 - Not found' });
       } else {
-        data.title = 'Watchlist - ' + data.name;
-        res.render('watchlist/watchlist', data);
+        body.title = 'Watchlist - ' + body.name;
+        body.created = new Date(body.created).toUTCString()
+        res.render('watchlist/watchlist', body);
       }
     });
   } else res.redirect('../auth/login');
@@ -51,7 +52,13 @@ router.post('/:id', (req, res) => {
       } else {
         const movie = tmdb.get(req.body.movieID);
         data.addMovie(movie.name, movie.year, movie.img);
-        data.save();
+        Watchlist.update(data, (err, body) => {
+          if (!err) {
+            body.title = 'Watchlist - ' + body.name;
+            body.created = new Date(body.created).toUTCString();
+            res.render('watchlist/watchlist', body);
+          }
+        })
       }
     });
   } else res.redirect('../auth/login');

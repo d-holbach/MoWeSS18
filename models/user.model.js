@@ -62,8 +62,7 @@ function hashPassword(password) {
 
   return {
       salt: salt,
-      hash: hash,
-      iterations: iterations
+      hash: hash
   };
 }
 
@@ -87,7 +86,7 @@ exports.search = (key, value, done) => {
 exports.get = (mail, done) => {
   userDB.get(mail, (err, body) => {
     if (!err) {
-      let user = body.docs[0];
+      let user = body;
       user = new User(user._id, user.salt, user.hash, user.iterations, user.created, user.updated);
       return done(null, user);
     }
