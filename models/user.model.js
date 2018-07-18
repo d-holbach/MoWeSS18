@@ -2,7 +2,7 @@
 
 const crypto = require('crypto');
 const nano = require('nano')('http://'+process.env.DB_HOST+':'+process.env.DB_PORT+'');
-let user = nano.db.use('user');
+let userDB = nano.db.use('user');
 
 const options = {
   'saltLen': 128,
@@ -16,7 +16,7 @@ nano.db.get('user', function(err, body) {
   if ( err && err.statusCode === 404 ) {
     nano.db.create('user', function(err) {
       if ( !err ) {
-        user = nano.db.use('user');
+        userDB = nano.db.use('user');
       } else {
         throw err;
       }
@@ -59,7 +59,7 @@ function hashPassword(password) {
   var salt = crypto.randomBytes(options.saltLen).toString(options.encoding);
   var hash = crypto.pbkdf2Sync(password, salt, options.iterations, options.keyLen, options.digestAlgorithm);
   hash = hash.toString(options.encoding);
-  
+
   return {
       salt: salt,
       hash: hash,
@@ -85,7 +85,7 @@ exports.search = (key, value, done) => {
 }
 
 exports.get = (mail, done) => {
-  user.get(mail, (err, body) => {
+  userDB.get(mail, (err, body) => {
     if (!err) {
       let user = body.docs[0];
       user = new User(user._id, user.salt, user.hash, user.iterations, user.created, user.updated);
@@ -104,7 +104,7 @@ exports.create = (mail, password) => {
   const crypt = hashPassword(password);
   const newUser = new User(mail, crypt.salt, crypt.hash);
 
-  user.insert(newUser, (err, body) => {
+  userDB.insert(newUser, (err, body) => {
     if (!err) {
       return body;
     }

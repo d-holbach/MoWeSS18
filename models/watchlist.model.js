@@ -1,13 +1,13 @@
 'use strict';
 
 const nano = require('nano')('http://'+process.env.DB_HOST+':'+process.env.DB_PORT+'');
-let watchlist = nano.db.use('watchlist');
+let watchlistDB = nano.db.use('watchlist');
 
 nano.db.get('watchlist', function(err, body) {
   if ( err && err.statusCode === 404 ) {
     nano.db.create('watchlist', function(err) {
       if ( !err ) {
-        watchlist = nano.db.use('watchlist');
+        watchlistDB = nano.db.use('watchlist');
       } else {
         throw err;
       }
@@ -17,8 +17,32 @@ nano.db.get('watchlist', function(err, body) {
   }
 });
 
+class Watchlist {
+  constructor(id, name, movies, created, updated) {
+    this._id = id;
+    this.name = name || "";
+    this.movies = movies || [];
+    this.created = created || new Date().toISOString();
+    this.updated = updated || new Date().toISOString();
+  }
+
+  addMovie(title, year, img, seen) {
+    let movie = {};
+    movie.title = title;
+    movie.year = year;
+    movie.img = img;
+    movie.seen = seen || false;
+
+    this.movies.push(movie);
+  }
+
+  save() {
+
+  }
+}
+
 exports.get = (id, done) => {
-  watchlist.get(id, (err, body) => {
+  watchlistDB.get(id, (err, body) => {
     if (!err) {
       return done(body);
     }
@@ -27,11 +51,9 @@ exports.get = (id, done) => {
 }
 
 exports.create = (id, name) => {
-  let newWatchlist = {};
-  newWatchlist.name = name;
-  newWatchlist.movies = [];
+  let newWatchlist = new Watchlist(id, name);
 
-  watchlist.insert(newWatchlist, id, (err, body) => {
+  watchlistDB.insert(newWatchlist, (err, body) => {
     if (!err) {
       return body;
     }
