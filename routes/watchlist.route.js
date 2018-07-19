@@ -12,15 +12,19 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', (req, res) => {
   if (req.user) {
-    res.render('watchlist/index', { title: `Watchlist - Dashboard`}, (err, html) => {
-      res.send(html);
+    Watchlist.listByUser(req.user._id, (err, list) => {
+      if (!err) {
+        res.render('watchlist/index', { title: `Watchlist - Dashboard`, list: list }, (err, html) => {
+          res.send(html);
+        });
+      }
     });
   } else res.redirect('../');
 });
 
 router.get('/:id', (req, res) => {
   if (req.user) {
-    let id = req.params.id;
+    const id = req.params.id;
 
     if (!shortid.isValid(id)) {
       res.status(400).send('Bad Request');
@@ -40,7 +44,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/:id', (req, res) => {
   if (req.user) {
-    let id = req.params.id;
+    const id = req.params.id;
 
     if (!shortid.isValid(id)) {
       res.status(400).send('Bad Request');
@@ -67,7 +71,7 @@ router.post('/:id', (req, res) => {
 router.post('/', (req, res) => {
   if (req.user) {
     const id = shortid.generate();
-    Watchlist.create(id, req.body.name);
+    Watchlist.create(id, req.body.name, req.user._id);
     res.render('watchlist/created', { title: `Watchlist with ${id} created`, id: id })
   } else res.redirect('../auth/login');
 });

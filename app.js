@@ -30,12 +30,12 @@ passport.use(new LocalStrategy({
   }
 ));
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser( (user, done) => {
   done(null, user._id);
 });
 
-passport.deserializeUser(function(user, done) {
-  User.get(user._id, function(err, user) {
+passport.deserializeUser( (user, done) => {
+  User.get(user, (err, user) => {
     done(err, user);
   });
 });

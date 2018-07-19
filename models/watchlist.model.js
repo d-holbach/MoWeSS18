@@ -18,9 +18,10 @@ nano.db.get('watchlist', function(err, body) {
 });
 
 class Watchlist {
-  constructor(id, name, movies, created, updated) {
+  constructor(id, name, user, movies, created, updated) {
     this._id = id;
     this.name = name || "";
+    this.user = user;
     this.movies = movies || [];
     this.created = created || new Date().toISOString();
     this.updated = updated || new Date().toISOString();
@@ -40,8 +41,24 @@ class Watchlist {
 exports.get = (id, done) => {
   watchlistDB.get(id, (err, body) => {
     if (!err) {
-      const watchlist = new Watchlist(body._id, body.name, body.movies, body.created, body.updated);
+      const watchlist = new Watchlist(body._id, body.name, body.user, body.movies, body.created, body.updated);
       return done(null, watchlist);
+    }
+    return done(err, body);
+  });
+}
+
+exports.listByUser = (user, done) => {
+  nano.request({
+    db: 'watchlist',
+    method: 'post',
+    path: '_find',
+    body: { 'selector': {
+      'user': user }
+    }
+  }, (err, body) => {
+    if (!err) {
+      return done(null, body.docs);
     }
     return done(err, body);
   });
@@ -61,8 +78,8 @@ exports.update = (watchlist, done) => {
   });
 }
 
-exports.create = (id, name) => {
-  let newWatchlist = new Watchlist(id, name);
+exports.create = (id, name, user) => {
+  let newWatchlist = new Watchlist(id, name, user);
 
   watchlistDB.insert(newWatchlist, (err, body) => {
     if (!err) {

@@ -1,8 +1,15 @@
 include ../includes/header.pug
 main
   h1 Dashboard
+  h2 Create a watchlist
   form(action="/watchlist/", method="post")
     label(for="watchlistName") Name
     input(type="text", name="name", id="watchlistName", required)
     input(type="submit", value="Create List")
+  hr
+  h2 Your watchlists
+  ul
+    each val, index in list
+      li #{index+1} :
+        a(href="/watchlist/" + val._id) #{val.name}
 include ../includes/footer.pug

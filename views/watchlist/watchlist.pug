@@ -2,7 +2,7 @@ include ../includes/header.pug
 main
   h1 Wachtlist: #{name}
   ul
-    each val, index in movies
+    each val, index in movies.length ? movies : [ {title: 'No movies'} ] 
       li= index + ': ' + val.title
   p Created: #{created}
 include ../includes/footer.pug
