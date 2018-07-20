@@ -1,19 +1,28 @@
 'use strict';
 
-require('dotenv').config();
-const app = require('express')();
+const dotenv = require('dotenv').config();
+
+if (dotenv.error) {
+  throw dotenv.error
+}
+
+const express = require('express');
+const app = express();
 const session = require('express-session');
 const server = require('http').Server(app);
 const path = require('path');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
+const sassMiddleware = require('node-sass-middleware');
+const compression = require('compression');
 const watchlist = require(path.join(__dirname, 'routes/watchlist.route'));
 const auth = require(path.join(__dirname, 'routes/auth.route'));
 const User = require(path.join(__dirname, 'models/user.model'));
 
 const PORT = process.env.PORT || 3000;
 
+// PASSPORT CONFIG
 passport.use(new LocalStrategy({
   usernameField: 'mail'
 }, (mail, password, done) => {
@@ -40,6 +49,7 @@ passport.deserializeUser( (user, done) => {
   });
 });
 
+// MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ 
   secret: 'mowe18',
@@ -48,10 +58,19 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(sassMiddleware({
+  src: path.join(__dirname, 'views/styles/sass'),
+  dest: path.join(__dirname, 'public'),
+  debug: true,
+  outputStyle: 'compressed'
+}));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'pug');
 app.use('/auth', auth);
 app.use('/watchlist', watchlist);
+app.use(compression());
 
+// INDEX
 app.get('/', (req, res) => {
   if (req.user) {
     res.render('index', { title: 'Watchlist' }, (err, html) => {

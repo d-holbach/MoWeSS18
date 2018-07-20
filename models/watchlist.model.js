@@ -13,7 +13,7 @@ nano.db.get('watchlist', function(err, body) {
       }
     });
   } else if ( body === undefined ) {
-    throw "CouchDB Server isn't running."
+    throw "Can't connect to CouchDB Server."
   }
 });
 
