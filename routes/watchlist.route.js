@@ -5,7 +5,7 @@ const shortid = require('shortid');
 const bodyParser = require('body-parser');
 const path = require('path');
 const Watchlist = require(path.join(__dirname, '../models/watchlist.model'));
-const tmdb = require(path.join(__dirname, '../interfaces/tmdb.interface'));
+const omdb = require(path.join(__dirname, '../interfaces/omdb.interface'));
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -54,7 +54,7 @@ router.post('/:id', (req, res) => {
       if (data.statusCode === 404) {
         res.render('404', { title: '404 - Not found' });
       } else {
-        const movie = tmdb.get(req.body.movieID);
+        const movie = omdb.get(req.body.movieID);
         data.addMovie(movie.name, movie.year, movie.img);
         Watchlist.update(data, (err, body) => {
           if (!err) {
@@ -66,6 +66,27 @@ router.post('/:id', (req, res) => {
       }
     });
   } else res.redirect('../auth/login');
+});
+
+router.post('/:id/movies/', (req, res) => {
+  if (req.body.mode === 'search') {
+    omdb.search(req.body.title, (err, result) => {
+      if (!err) {
+        res.json(result.Search);
+      } else {
+        console.log('ERROR: /:id/movies/', err);
+      }
+    });
+  } else if (req.body.mode === 'add') {
+    omdb.get(req.body.id).then(results => {
+      res.json(results);
+    })
+    .catch((err) => {
+      res.json(err);
+    })
+  } else {
+    res.status(400).send('Bad Request');
+  }
 });
 
 router.post('/', (req, res) => {

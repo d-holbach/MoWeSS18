@@ -5,4 +5,12 @@ main
     each val, index in movies.length ? movies : [ {title: 'No movies'} ] 
       li= index + ': ' + val.title
   p Created: #{created}
+  hr
+  div(id='addMovie')
+    h2 Add movie:
+    input(type="text" name="movieTitle" placeholder="Search...")
+    button(name="search") Search
+  div(id='result')
+    ul
+script(src='../public/scripts/search.js')
 include ../includes/footer.pug

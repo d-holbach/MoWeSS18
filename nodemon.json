@@ -1,0 +1,13 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    ".git",
+    ".gitignore",
+    ".env-example",
+    ".eslintrc",
+    "node_modules/**/node_modules",
+    "public/",
+    "README.MD",
+    "yarn.lock"
+  ]
+}

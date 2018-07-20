@@ -70,6 +70,8 @@ app.use('/auth', auth);
 app.use('/watchlist', watchlist);
 app.use(compression());
 
+
+
 // INDEX
 app.get('/', (req, res) => {
   if (req.user) {
@@ -79,6 +81,8 @@ app.get('/', (req, res) => {
   } else res.redirect('/auth/login');
 });
 
-
+app.use(function(req, res) {
+  res.render('404', { title: '404 - Not found' });
+});
 
 server.listen(PORT, () => console.log(`Server runs on port: ${PORT}`));
