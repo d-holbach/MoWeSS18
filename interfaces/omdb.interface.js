@@ -17,3 +17,14 @@ exports.search = (name, done) => {
       done(err, null)
     });
 }
+
+exports.get = (id, done) => {
+  id = encodeURIComponent(id);
+  rp(options.url + '?apikey=' + options.key + '&i=' + id)
+    .then( (result) => {
+      done(null, JSON.parse(result)); 
+    })
+    .catch( (err) => {
+      done(err, null)
+    });
+}

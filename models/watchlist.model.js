@@ -26,23 +26,12 @@ class Watchlist {
     this.created = created || new Date().toISOString();
     this.updated = updated || new Date().toISOString();
   }
-
-  addMovie(title, year, img, seen) {
-    let movie = {};
-    movie.title = title;
-    movie.year = year;
-    movie.img = img;
-    movie.seen = seen || false;
-    this.updated = new Date().toISOString();
-    this.movies.push(movie);
-  }
 }
 
 exports.get = (id, done) => {
   watchlistDB.get(id, (err, body) => {
     if (!err) {
-      const watchlist = new Watchlist(body._id, body.name, body.user, body.movies, body.created, body.updated);
-      return done(null, watchlist);
+      return done(null, body);
     }
     return done(err, body);
   });
@@ -64,7 +53,10 @@ exports.listByUser = (user, done) => {
   });
 }
 
+
 exports.update = (watchlist, done) => {
+  watchlist.updated = new Date().toISOString()
+
   nano.request({
     db: 'watchlist',
     method: 'PUT',
@@ -86,5 +78,19 @@ exports.create = (id, name, user) => {
       return body;
     }
     throw err;
+  });
+}
+
+exports.delete = (id, rev, done) => {
+  nano.request({
+    db: 'watchlist',
+    method: 'DELETE',
+    path: id,
+    qs: { rev: rev }
+  }, (err, body) => {
+    if (!err) {
+      return done(null, body);
+    }
+    return done(err, body)
   });
 }

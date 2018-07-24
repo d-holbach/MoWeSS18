@@ -1,16 +1,27 @@
 include ../includes/header.pug
 main
   h1 Wachtlist: #{name}
-  ul
-    each val, index in movies.length ? movies : [ {title: 'No movies'} ] 
-      li= index + ': ' + val.title
-  p Created: #{created}
+  button(name="delete") Delete Watchlist
+  ul(id='movies')
+    each val, index in movies.length ? movies : [ {title: "No movies"} ] 
+      li
+        h3 #{val.title} (#{val.year})
+        p #{val.genres}
+        p #{val.director}
+        p #{val.plot}
+        p #{val.runtime}
+        p #{val.rating}
+        img(src=val.poster, alt="Poster of " + val.title)
+        input(type="hidden" name="movieID" value=val.id)
+        button(name="removeMovie") Remove 
+
+  p Created: #{createdOutput}
   hr
-  div(id='addMovie')
+  div(id="addMovie")
     h2 Add movie:
     input(type="text" name="movieTitle" placeholder="Search...")
     button(name="search") Search
-  div(id='result')
+  div(id="result")
     ul
-script(src='../public/scripts/search.js')
+script(src="../public/scripts/search.js")
 include ../includes/footer.pug

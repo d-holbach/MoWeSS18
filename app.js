@@ -70,8 +70,6 @@ app.use('/auth', auth);
 app.use('/watchlist', watchlist);
 app.use(compression());
 
-
-
 // INDEX
 app.get('/', (req, res) => {
   if (req.user) {
