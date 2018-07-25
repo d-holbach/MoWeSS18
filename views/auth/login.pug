@@ -4,6 +4,7 @@ main
   form(action="/auth/login", method="post")
     input(type="email", name="mail", id="loginMail", placeholder="E-Mail", required)
     input(type="password", name="password", id="loginPW" placeholder="Password", required, autocomplete="current-password")
+    input(type="hidden", name="url" value=reqUrl)
     input(type="submit", value="Login")
     input(type="reset", value="Reset")
   a(href="/auth/register") Register

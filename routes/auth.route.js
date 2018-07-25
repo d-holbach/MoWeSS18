@@ -18,10 +18,13 @@ router.get('/login', (req, res) => {
   res.render('auth/login', { title: 'Login' });
 });
 
-router.post('/login', passport.authenticate('local', { successRedirect: '/watchlist', 
-  failureRedirect: '/',
+router.post('/login', passport.authenticate('local', {
+  failureRedirect: '/login',
   failureFlash: true,
-  successFlash: true })
+  successFlash: true }), 
+  (req, res) => {
+    res.redirect('..' + req.body.url);
+  }
 );
 
 router.get('/logout', function(req, res){

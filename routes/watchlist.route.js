@@ -35,51 +35,45 @@ router.use('/:id/movies/:mid', (req, res, next) => {
 
 
 router.get('/', (req, res) => {
-  if (req.user) {
-    Watchlist.listByUser(req.user._id, (err, list) => {
-      if (!err) {
-        res.render('watchlist/index', { title: `Watchlist - Dashboard`, list: list }, (err, html) => {
-          res.send(html);
-        });
-      } else console.error('GET / - Watchlist.listByUser:', err);
-    });
-  } else res.redirect('../');
+  Watchlist.listByUser(req.user._id, (err, list) => {
+    if (!err) {
+      if (list === undefined || list.length == 0) list = null;
+      res.render('watchlist/index', { title: `Watchlist - Dashboard`, list: list }, (err, html) => {
+        res.send(html);
+      });
+    } else console.error('GET / - Watchlist.listByUser:', err);
+  });
 });
 
 router.post('/', (req, res) => {
-  if (req.user) {
-    const id = shortid.generate();
-    Watchlist.create(id, req.body.name, req.user._id);
-    res.render('watchlist/created', { title: `Watchlist with ${id} created`, id: id })
-  } else res.redirect('../auth/login');
+  const id = shortid.generate();
+  Watchlist.create(id, req.body.name, req.user._id);
+  res.render('watchlist/created', { title: `Watchlist with ${id} created`, id: id })
 });
 
 router.get('/:id', (req, res) => {
-  if (req.user) {
-    Watchlist.get(req.id, (err, body) => {
-      if (err && err.statusCode === 404) {
-        res.render('404', { title: '404 - Not found' });
-      } else {
-        body.title = 'Watchlist - ' + body.name;
-        body.createdOutput = new Date(body.created).toUTCString()
-        res.render('watchlist/watchlist', body);
-      }
-    });
-  } else res.redirect('../auth/login');
+  Watchlist.get(req.id, (err, body) => {
+    if (err && err.statusCode === 404) {
+      res.render('404', { title: '404 - Not found' });
+    } else {
+      body.title = 'Watchlist - ' + body.name;
+      if (body.movies === undefined || body.movies.length == 0) body.movies = null;
+      body.createdOutput = new Date(body.created).toUTCString()
+      res.render('watchlist/watchlist', body);
+    }
+  });
 });
 
 router.delete('/:id', (req, res) => {
-  if (req.user) {
-    Watchlist.get(req.id, (err, watchlist) => {
-      if (!err) {
-        Watchlist.delete(req.id, watchlist._rev, (err, body) => {
-          if (!err) {
-            res.status(202).send('Deleted');
-          } else console.error('DELETE /:id - Watchlist.delete:', err);
-        });
-      } else console.error('DELETE /:id - Watchlist.get:', err);
-    });
-  }
+  Watchlist.get(req.id, (err, watchlist) => {
+    if (!err) {
+      Watchlist.delete(req.id, watchlist._rev, (err, body) => {
+        if (!err) {
+          res.status(202).send('Deleted');
+        } else console.error('DELETE /:id - Watchlist.delete:', err);
+      });
+    } else console.error('DELETE /:id - Watchlist.get:', err);
+  });
 });
 
 router.post('/:id/movies/', (req, res) => {

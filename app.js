@@ -67,16 +67,23 @@ app.use(sassMiddleware({
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'pug');
 app.use('/auth', auth);
+app.use('/', (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    if (req.headers.accept.match(/(text\/html|application\/xhtml\+xml)/) !== null) res.status(401).render('auth/login', { title: 'Login', reqUrl: req.url });
+    else if (req.headers.accept.match(/application\/json/) !== null) res.status(401).json( { message: 'Unauthorized' } );
+    else res.status(401).send('Unauthorized');
+  }
+});
 app.use('/watchlist', watchlist);
 app.use(compression());
 
 // INDEX
 app.get('/', (req, res) => {
-  if (req.user) {
-    res.render('index', { title: 'Watchlist' }, (err, html) => {
-      res.send(html);
-    });
-  } else res.redirect('/auth/login');
+  res.render('index', { title: 'Watchlist' }, (err, html) => {
+    res.send(html);
+  });
 });
 
 app.use(function(req, res) {

@@ -3,18 +3,20 @@ main
   h1 Wachtlist: #{name}
   button(name="delete") Delete Watchlist
   ul(id='movies')
-    each val, index in movies.length ? movies : [ {title: "No movies"} ] 
-      li
-        h3 #{val.title} (#{val.year})
-        p #{val.genres}
-        p #{val.director}
-        p #{val.plot}
-        p #{val.runtime}
-        p #{val.rating}
-        img(src=val.poster, alt="Poster of " + val.title)
-        input(type="hidden" name="movieID" value=val.id)
-        button(name="removeMovie") Remove 
-
+    if movies
+      each val, index in movies
+        li
+          h3 #{val.title} (#{val.year})
+          p #{val.genres}
+          p #{val.director}
+          p #{val.plot}
+          p #{val.runtime}
+          p #{val.rating}
+          img(src=val.poster, alt="Poster of " + val.title)
+          input(type="hidden" name="movieID" value=val.id)
+          button(name="removeMovie") Remove 
+    else
+      li(id="noMovies") No movies yet
   p Created: #{createdOutput}
   hr
   div(id="addMovie")

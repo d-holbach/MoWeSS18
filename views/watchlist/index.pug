@@ -8,8 +8,11 @@ main
     input(type="submit", value="Create List")
   hr
   h2 Your watchlists
-  ul
-    each val, index in list
-      li #{index+1} :
-        a(href="/watchlist/" + val._id) #{val.name}
+  if list
+    ul
+      each val, index in list
+        li #{index+1} :
+          a(href="/watchlist/" + val._id) #{val.name}
+  else
+    h3 No watchlists yet
 include ../includes/footer.pug

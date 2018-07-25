@@ -17,9 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
       method: 'POST',
       body: JSON.stringify(data),
       headers:{
+        'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
+    }).then(res => {
+      if (res.status === 401) window.location = window.location.origin + '/auth/login';
+      else return res.json();
+    })
     .catch(error => console.error('Error:', error))
     .then(response => {
       response.forEach(movie => {
@@ -33,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
         image.setAttribute('alt', movie.Title);
         button.appendChild(document.createTextNode('+'));
         button.addEventListener('click', () => {
+          const noMovies = document.getElementById('noMovies');
+          if (noMovies !== null) noMovies.parentNode.removeChild(noMovies);
           add(movie.imdbID);
         }, false );
 
@@ -40,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
         listElement.appendChild(image);
         listElement.appendChild(button);
         resultList.appendChild(listElement);
-
       });
     });
   }
@@ -73,13 +78,18 @@ document.addEventListener('DOMContentLoaded', () => {
       input.setAttribute('value', movie.id);
       button.appendChild(document.createTextNode('Remove'));
       button.addEventListener('click', (e) => {
-        console.log('e', e);
         const movieElement = e.target.parentElement;
+        const movieContainer = movieElement.parentNode;
         const id = movieElement.querySelector('input[name=movieID]').value;
         removeMovie(id);
-        movieElement.parentNode.removeChild(movieElement);
+        movieContainer.removeChild(movieElement);
+        if (!movieContainer.hasChildNodes()) {
+          const noMovies = document.createElement('li');
+          noMovies.setAttribute('id', 'noMovies');
+          noMovies.appendChild(document.createTextNode('No movies yet'));
+          movieContainer.appendChild(noMovies);
+        }
       })
-
 
       listElement.appendChild(title);
       listElement.appendChild(director);
@@ -90,8 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
       listElement.appendChild(input);
       listElement.appendChild(button);
       movies.appendChild(listElement);
-
-
     });
   }
 
@@ -99,7 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(window.location.href, {
       method: 'DELETE'
     }).then(res => {
-      if (res.status === 202) window.location = window.location.origin + '/watchlist';
+      if (res.status === 401) window.location = window.location.origin + '/auth/login';
+      else if (res.status === 202 )window.location = window.location.origin + '/watchlist';
+      else console.log('res', res);
     })
     .catch(error => console.error('Error:', error))
   }
@@ -112,19 +122,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   searchButton.addEventListener('click', search );
   deleteButton.addEventListener('click', deleteWatchlist );
-  console.log(removeMovieButtons)
   removeMovieButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const movieElement = button.parentElement;
+    button.addEventListener('click', (e) => {
+      const movieElement = e.target.parentElement;
+      const movieContainer = movieElement.parentNode;
       const id = movieElement.querySelector('input[name=movieID]').value;
       removeMovie(id);
-      movieElement.parentNode.removeChild(movieElement);
+      movieContainer.removeChild(movieElement);
+      if (!movieContainer.hasChildNodes()) {
+        const noMovies = document.createElement('li');
+        noMovies.setAttribute('id', 'noMovies');
+        noMovies.appendChild(document.createTextNode('No movies yet'));
+        movieContainer.appendChild(noMovies);
+      }
     })
   });
 
   searchInput.onkeypress = (e) => {
-    if (e.key === 'Enter') {
-      search();
-    }
+    if (e.key === 'Enter') search();
   };
 });
