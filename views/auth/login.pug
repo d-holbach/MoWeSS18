@@ -1,5 +1,5 @@
 include ../includes/header.pug
-main
+main(class=mainClass)
   h1 Login
   form(action="/auth/login", method="post")
     input(type="email", name="mail", id="loginMail", placeholder="E-Mail", required)

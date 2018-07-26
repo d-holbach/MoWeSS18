@@ -11,7 +11,7 @@ main
   if list
     ul
       each val, index in list
-        li #{index+1} :
+        li #{index+1} : 
           a(href="/watchlist/" + val._id) #{val.name}
   else
     h3 No watchlists yet

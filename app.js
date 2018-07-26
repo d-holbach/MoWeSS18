@@ -31,16 +31,17 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/auth', auth);
 app.use((req, res, next) => {
   if (req.user) {
     next();
   } else {
-    if (req.headers.accept.match(/(text\/html|application\/xhtml\+xml)/) !== null) res.status(401).render('auth/login', { title: 'Login', reqUrl: req.url });
+    if (req.headers.accept.match(/(text\/html|application\/xhtml\+xml)/) !== null) res.status(401).render('auth/login', { title: 'Login', reqUrl: req.url, mainClass: 'login' });
     else if (req.headers.accept.match(/application\/json/) !== null) res.status(401).json( { message: 'Unauthorized' } );
     else res.status(401).send('Unauthorized');
   }
 });
-app.use('/auth', auth);
+
 app.use('/watchlist', watchlist);
 app.use(compression());
 

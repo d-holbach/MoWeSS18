@@ -1,0 +1,16 @@
+input[type=text], input[type=email], input[type=password] {
+  color: $backgroundColor;
+}
+
+button, input[type=submit], input[type=button], input[type=reset] {
+  background-color: $primaryColor;
+  border: 1px solid $secondaryColor;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 5px 10px;
+
+  &:hover {
+    background-color: $fontColor;
+    color: $backgroundColor;
+  }
+}

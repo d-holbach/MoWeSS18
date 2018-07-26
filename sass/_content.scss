@@ -1,12 +1,45 @@
-h1, h2, h3, h4, h5, h6 {
+* {
+  box-sizing: border-box;
   color: $fontColor;
-  letter-spacing: 0.05em;
+  font-family: $textFont;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+}
+
+h1 {
+  font-family: $headlineFont;
+}
+
+h2, h3, h4, h5, h6 {
+  letter-spacing: 0;
 }
 
 a {
   color: $secondaryColor;
+  font-family: $textFont;
 
   &:hover {
     color: $highlightColor;
+  }
+}
+
+.login {
+  text-align: center;
+
+  form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    input {
+      margin-bottom: 5px;
+    }
+  }
+  a {
+    display: block;
+    margin-top: 15px;
   }
 }
