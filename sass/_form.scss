@@ -1,5 +1,23 @@
 input[type=text], input[type=email], input[type=password] {
-  color: $backgroundColor;
+  border: 0;
+  border-radius: 0;
+  color: #000;
+  font-size: 14px;
+  margin: 0;
+  padding: 5px 10px;
+
+  &::-webkit-input-placeholder {
+    color: $backgroundColor;
+  }
+  &::-moz-placeholder { 
+    color: $backgroundColor;
+  }
+  &:-ms-input-placeholder {
+    color: $backgroundColor;
+  }
+  &:-moz-placeholder {
+    color: $backgroundColor;
+  }
 }
 
 button, input[type=submit], input[type=button], input[type=reset] {

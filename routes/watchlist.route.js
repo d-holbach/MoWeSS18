@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
   Watchlist.listByUser(req.user._id, (err, list) => {
     if (!err) {
       if (list === undefined || list.length == 0) list = null;
-      res.render('watchlist/index', { title: `Watchlist - Dashboard`, list: list }, (err, html) => {
+      res.render('watchlist/index', { title: `Watchlist - Dashboard`, list: list, mainClass: 'dashboard', login: req.user }, (err, html) => {
         res.send(html);
       });
     } else console.error('GET / - Watchlist.listByUser:', err);
@@ -48,14 +48,16 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   const id = shortid.generate();
   Watchlist.create(id, req.body.name, req.user._id);
-  res.render('watchlist/created', { title: `Watchlist with ${id} created`, id: id })
+  res.render('watchlist/created', { title: `Watchlist with ${id} created`, id: id, mainClass: 'created', login: req.user })
 });
 
 router.get('/:id', (req, res) => {
   Watchlist.get(req.id, (err, body) => {
     if (err && err.statusCode === 404) {
-      res.render('404', { title: '404 - Not found' });
+      res.render('404', { title: '404 - Not found', mainClass: 'error404', login: req.user });
     } else {
+      body.login = req.user;
+      body.mainClass = 'watchlist'
       body.title = 'Watchlist - ' + body.name;
       if (body.movies === undefined || body.movies.length == 0) body.movies = null;
       body.createdOutput = new Date(body.created).toUTCString()

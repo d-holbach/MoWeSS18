@@ -1,5 +1,5 @@
 include ../includes/header.pug
-main
+main(class=mainClass)
   h1 Create your personal account 
   form(action="/auth/register", method="post")
     input(type="email", name="mail", id="registerMail", placeholder="E-Mail", required)

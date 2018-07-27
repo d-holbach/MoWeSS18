@@ -34,7 +34,7 @@ passport.deserializeUser( (user, done) => {
 });
 
 router.get('/register', (req, res) => {
-  res.render('auth/register', { title: 'Register' });
+  res.render('auth/register', { title: 'Register', mainClass: 'register', login: req.user });
 });
 
 router.post('/register', (req, res) => {
@@ -43,7 +43,7 @@ router.post('/register', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.render('auth/login', { title: 'Login', mainClass: 'login' });
+  res.render('auth/login', { title: 'Login', mainClass: 'login', login: req.user });
 });
 
 router.post('/login', passport.authenticate('local', {

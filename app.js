@@ -21,6 +21,7 @@ const PORT = process.env.PORT || 3000;
 
 // MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(compression());
 app.set('views', path.join(__dirname, 'views'));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'pug');
@@ -36,24 +37,22 @@ app.use((req, res, next) => {
   if (req.user) {
     next();
   } else {
-    if (req.headers.accept.match(/(text\/html|application\/xhtml\+xml)/) !== null) res.status(401).render('auth/login', { title: 'Login', reqUrl: req.url, mainClass: 'login' });
+    if (req.headers.accept.match(/(text\/html|application\/xhtml\+xml)/) !== null) res.status(401).render('auth/login', { title: 'Login', reqUrl: req.url, mainClass: 'login', login: req.user });
     else if (req.headers.accept.match(/application\/json/) !== null) res.status(401).json( { message: 'Unauthorized' } );
     else res.status(401).send('Unauthorized');
   }
 });
-
 app.use('/watchlist', watchlist);
-app.use(compression());
 
 // INDEX
 app.get('/', (req, res) => {
-  res.render('index', { title: 'Watchlist' }, (err, html) => {
+  res.render('index', { title: 'Watchlist', mainClass: 'index', login: req.user }, (err, html) => {
     res.send(html);
   });
 });
 
 app.use((req, res) => {
-  res.status(404).render('404', { title: '404 - Not found' });
+  res.status(404).render('404', { title: '404 - Not found', mainClass: 'error404', login: req.user });
 });
 
 server.listen(PORT, () => console.log(`Server runs on port: ${PORT}`));

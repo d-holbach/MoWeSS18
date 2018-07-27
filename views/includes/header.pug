@@ -4,10 +4,11 @@ html
   body
     header
       nav
-        ul
-          li
-            a(href="/") Home
-          li
-            a(href="/watchlist") Watchlist
-          li
-            a(href="/auth/logout") Logout
+        if login
+          ul
+            li
+              a(href="/") Home
+            li
+              a(href="/watchlist") Watchlist
+            li
+              a(href="/auth/logout") Logout

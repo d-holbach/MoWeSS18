@@ -10,7 +10,7 @@ gulp.task('sass', () => {
     .pipe(gulp.dest('./public/styles'));
 });
  
-gulp.task('watch', () => {
+gulp.task('watch', ['sass'], () => {
   gulp.watch('./sass/**/*.scss', ['sass']);
   nodemon({
     restartable: "rs",

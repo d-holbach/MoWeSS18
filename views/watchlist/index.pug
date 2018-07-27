@@ -1,18 +1,19 @@
 include ../includes/header.pug
-main
-  h1 Dashboard
-  h2 Create a watchlist
-  form(action="/watchlist/", method="post")
-    label(for="watchlistName") Name
-    input(type="text", name="name", id="watchlistName", required)
-    input(type="submit", value="Create List")
-  hr
-  h2 Your watchlists
-  if list
-    ul
-      each val, index in list
-        li #{index+1} : 
-          a(href="/watchlist/" + val._id) #{val.name}
-  else
-    h3 No watchlists yet
+main(class=mainClass)
+  div(class="dashboardHeader")
+    h1 Dashboard
+  div(class="create")
+    h3 Create a watchlist
+    form(action="/watchlist/", method="post")
+      input(type="text", name="name", id="watchlistName", placeholder="Name", required)
+      input(type="submit", value="Create List")
+  div(class="watchlistOverview")
+    h3 Your watchlists
+      if list
+        ul
+          each val, index in list
+            li #{index+1} : 
+              a(href="/watchlist/" + val._id) #{val.name}
+      else
+        h3 No watchlists yet
 include ../includes/footer.pug

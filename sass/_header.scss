@@ -1,24 +1,28 @@
-header nav {
-  padding-top: 30px;
+header {
+  grid-area: Header;
+  
+  nav {
+    padding-top: 30px;
 
-  ul {
-    align-self: center; 
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    list-style: none;
-    margin: 0;
-    padding-left: 50px;
-    
-    li {
-      margin-right: 10px;
+    ul {
+      align-self: center; 
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      list-style: none;
+      margin: 0;
+      padding-left: 50px;
       
-      a {
-        text-decoration: none;
-      }
+      li {
+        margin-right: 10px;
+        
+        a {
+          text-decoration: none;
+        }
 
-      &:last-child {
-        margin-right: 0;
+        &:last-child {
+          margin-right: 0;
+        }
       }
     }
   }

@@ -12,20 +12,23 @@ h1 {
   font-family: $headlineFont;
 }
 
-h2, h3, h4, h5, h6 {
-  letter-spacing: 0;
-}
-
 a {
   color: $secondaryColor;
   font-family: $textFont;
+  text-decoration: none;
 
   &:hover {
     color: $highlightColor;
   }
 }
 
-.login {
+main {
+  grid-area: Content;
+  margin: 0;
+  padding: 0 25px;
+}
+
+main.login {
   text-align: center;
 
   form {
@@ -35,11 +38,83 @@ a {
     justify-content: center;
 
     input {
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+    }
+    input:last-child {
+      margin-bottom: 0;
     }
   }
   a {
-    display: block;
+    display: inline-block;
     margin-top: 15px;
+  }
+}
+
+main.dashboard {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 80px 1fr;
+  grid-template-areas: "DashboardHeader DashboardHeader" "Create Overview";
+
+  h1, h2, h3, h4, h5, h6 {
+    text-align: left;
+  }
+
+  div.dashboardHeader {
+    grid-area: DashboardHeader;
+  }
+
+  div.create {
+    grid-area: Create;
+  }
+
+  div.watchlistOverview {
+    grid-area: Overview;
+    ul {
+      list-style: none;
+    }
+  }
+
+  @media screen and (max-width: $sm) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 80px 1fr 1fr;
+    grid-template-areas: "DashboardHeader" "Create" "Overview";
+  }
+}
+
+main.watchlist {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 80px 1fr;
+  grid-template-areas: "WatchlistHeader WatchlistHeader" "Movies Add";
+
+  h1, h2, h3, h4, h5, h6 {
+    text-align: left;
+  }
+
+  div.watchlistHeader {
+    display: flex;
+    flex-direction: row;
+    grid-area: WatchlistHeader;
+  }
+
+  div.watchlistAdd {
+    grid-area: Add;
+  }
+
+  div.watchlistMovies {
+    grid-area: Movies;
+    ul {
+      list-style: none;
+    }
+  }
+}
+
+main.error404 {
+  img {
+    display: block;
+    margin: 0 auto;
   }
 }

@@ -1,9 +1,9 @@
 body {
-  background: $backgroundColor;
+  @include backgroundGradient();
   display: grid;
-  grid-gap: 1rem;
+  grid-template-columns: 1fr;
   grid-template-rows: 100px 1fr 100px;
+  grid-template-areas: "Header" "Content" "Footer";
   height: 100vh;
   margin: 0;
-  width: 100vw;
 }

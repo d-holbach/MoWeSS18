@@ -3,3 +3,18 @@ $primaryColor: #5b8c5a;
 $secondaryColor: #cfd186;
 $highlightColor: #e3655b;
 $fontColor: #efedee;
+$black: #000;
+
+@mixin backgroundGradient() {
+  background: $backgroundColor;
+  background: -moz-linear-gradient(-45deg, $backgroundColor 0%, #4a5149 50%, #434942 100%); 
+  background: -webkit-linear-gradient(-45deg, $backgroundColor 0%,#4a5149 50%,#434942 100%);
+  background: linear-gradient(135deg, $backgroundColor 0%,#4a5149 50%,#434942 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$backgroundColor', endColorstr='#434942',GradientType=1 );
+}
+
+$xs: 0;
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
