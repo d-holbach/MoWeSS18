@@ -5,6 +5,7 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
+  margin: 15px 0;
   text-align: center;
 }
 
@@ -25,7 +26,7 @@ a {
 main {
   grid-area: Content;
   margin: 0;
-  padding: 0 25px;
+  padding: 0 15px;
 }
 
 main.login {
@@ -78,8 +79,12 @@ main.dashboard {
 
   @media screen and (max-width: $sm) {
     grid-template-columns: 1fr;
-    grid-template-rows: 80px 1fr 1fr;
+    grid-template-rows: auto auto auto;
     grid-template-areas: "DashboardHeader" "Create" "Overview";
+
+    div.watchlistOverview ul {
+      padding-left: 0;
+    }
   }
 }
 
@@ -95,19 +100,159 @@ main.watchlist {
   }
 
   div.watchlistHeader {
+    align-items: center;
+    border-bottom: 1px solid $fontColor;
     display: flex;
     flex-direction: row;
     grid-area: WatchlistHeader;
+    margin-bottom: 15px;
+    
+    p {
+      margin-left: auto;
+    }
+    button {
+      margin-left: auto;
+    }
   }
 
   div.watchlistAdd {
     grid-area: Add;
+    height: 560px;
+    padding-left: 15px;
+    overflow-y: scroll;
+    
+    ul li {
+      align-items: center;
+      display: flex;
+      margin-bottom: 15px;
+      margin-right: 15px;
+      padding-bottom: 15px;
+
+      img {
+        height: auto;
+        margin-left: auto;
+        max-width: 50px;
+
+      }
+      button {
+        margin-left: auto;
+      }
+    }
   }
 
   div.watchlistMovies {
     grid-area: Movies;
-    ul {
-      list-style: none;
+    height: 560px;
+    padding-right: 15px;
+    overflow-y: scroll;
+
+    ul li {
+      display: grid;
+      height: 100%;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto auto auto auto auto;
+      grid-template-areas: "Title Image" "Director Plot" "Genre Plot" "Runtime Plot" "Rating Plot" "Remove Plot";
+      margin: 15px 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+      p {
+        margin: 0;
+      }
+      h3 {
+        align-self: center;
+        grid-area: Title;
+      }
+      img {
+        height: auto;
+        grid-area: Image;
+        justify-self: center;
+        max-width: 70px;
+      }
+      .genre {
+        grid-area: Genre;
+      }
+      .director {
+        grid-area: Director;
+      }
+      .plot {
+        grid-area: Plot;
+      }
+      .runtime {
+        grid-area: Runtime;
+      }
+      .rating {
+        grid-area: Rating;
+      }
+      .remove {
+        grid-area: Remove;
+        margin: 5px 0 15px;
+      }
+    }
+  }
+
+  div.watchlistAdd ul, div.watchlistMovies ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      border-bottom: 1px solid $fontColor;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  @media screen and (max-width: $sm) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas: "WatchlistHeader" "Movies" "Add";
+
+    div.watchlistHeader {
+      align-items: normal;
+      flex-direction: column;
+      
+      h1 {
+        display: block;
+        margin: 0 0 15px;
+      }
+      p {
+        display: block;
+        margin: 0 0 15px;
+      }
+    }
+
+    div.watchlistMovies {
+      overflow-y: unset;
+      height: auto;
+      margin-bottom: 50px;
+      padding-right: 0;
+      
+      ul li {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto auto auto auto auto;
+        grid-template-areas: "Title " "Image" "Director" "Genre" "Runtime" "Rating" "Plot" "Remove";
+      }
+    }
+    div.watchlistAdd {
+      overflow-y: unset;
+      height: auto;
+      padding-left: 0;
+      
+      ul li {
+        flex-direction: column;
+        margin-right: 0;
+
+        img {
+          margin: 0 0 10px;
+        }
+      }
     }
   }
 }

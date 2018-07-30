@@ -18,6 +18,12 @@ input[type=text], input[type=email], input[type=password] {
   &:-moz-placeholder {
     color: $backgroundColor;
   }
+
+  @media screen and (max-width: $sm) {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+  } 
 }
 
 button, input[type=submit], input[type=button], input[type=reset] {
@@ -31,4 +37,10 @@ button, input[type=submit], input[type=button], input[type=reset] {
     background-color: $fontColor;
     color: $backgroundColor;
   }
+
+  @media screen and (max-width: $sm) {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+  } 
 }

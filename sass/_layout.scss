@@ -6,4 +6,8 @@ body {
   grid-template-areas: "Header" "Content" "Footer";
   height: 100vh;
   margin: 0;
+
+  @media screen and (max-width: $sm) { 
+    grid-template-rows: auto 1fr 100px;
+  }
 }

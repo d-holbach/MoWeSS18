@@ -26,4 +26,15 @@ header {
       }
     }
   }
+  @media screen and (max-width: $sm) { 
+    margin-bottom: 50px;
+    
+    nav ul {
+      flex-direction: column;
+      padding-left: 0;
+      li {
+        margin: 0 0 15px;
+      }
+    }
+  }
 }

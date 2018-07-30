@@ -62,15 +62,35 @@ document.addEventListener('DOMContentLoaded', () => {
       const plot = document.createElement('p');
       const runtime = document.createElement('p');
       const rating = document.createElement('p');
+      const genre = document.createElement('p');
       const image = document.createElement('img');
       const input = document.createElement('input');
+      const buttonContainer = document.createElement('div');
       const button = document.createElement('button');
+
+      director.appendChild(document.createElement('strong'));
+      director.firstChild.appendChild(document.createTextNode('Director: '));
+      runtime.appendChild(document.createElement('strong'));
+      runtime.firstChild.appendChild(document.createTextNode('Runtime: '));
+      plot.appendChild(document.createElement('strong'));
+      plot.firstChild.appendChild(document.createTextNode('Plot: '));
+      rating.appendChild(document.createElement('strong'));
+      rating.firstChild.appendChild(document.createTextNode('Rating: '));
+      genre.appendChild(document.createElement('strong'));
+      genre.firstChild.appendChild(document.createTextNode('Genre: '));
 
       title.appendChild(document.createTextNode(movie.title + ' (' + movie.year + ')'));
       director.appendChild(document.createTextNode(movie.director));
       plot.appendChild(document.createTextNode(movie.plot));
       runtime.appendChild(document.createTextNode(movie.runtime));
       rating.appendChild(document.createTextNode(movie.rating));
+      genre.appendChild(document.createTextNode(movie.genre));
+      director.setAttribute('class', 'director');
+      plot.setAttribute('class', 'plot');
+      runtime.setAttribute('class', 'runtime');
+      rating.setAttribute('class', 'rating');
+      genre.setAttribute('class', 'genre');
+      buttonContainer.setAttribute('class', 'remove');
       image.setAttribute('src', movie.poster);
       image.setAttribute('alt', movie.title);
       input.setAttribute('type', 'hidden');
@@ -78,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
       input.setAttribute('value', movie.id);
       button.appendChild(document.createTextNode('Remove'));
       button.addEventListener('click', (e) => {
-        const movieElement = e.target.parentElement;
+        const movieElement = e.target.parentElement.parentElement;
         const movieContainer = movieElement.parentNode;
         const id = movieElement.querySelector('input[name=movieID]').value;
         removeMovie(id);
@@ -90,15 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
           movieContainer.appendChild(noMovies);
         }
       })
+      buttonContainer.appendChild(button);
 
       listElement.appendChild(title);
+      listElement.appendChild(image);
       listElement.appendChild(director);
-      listElement.appendChild(plot);
+      listElement.appendChild(genre);
       listElement.appendChild(runtime);
       listElement.appendChild(rating);
-      listElement.appendChild(image);
+      listElement.appendChild(buttonContainer);
+      listElement.appendChild(plot);
       listElement.appendChild(input);
-      listElement.appendChild(button);
       movies.appendChild(listElement);
     });
   }
@@ -124,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
   deleteButton.addEventListener('click', deleteWatchlist );
   removeMovieButtons.forEach(button => {
     button.addEventListener('click', (e) => {
-      const movieElement = e.target.parentElement;
+      const movieElement = e.target.parentElement.parentElement;
       const movieContainer = movieElement.parentNode;
       const id = movieElement.querySelector('input[name=movieID]').value;
       removeMovie(id);

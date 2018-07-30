@@ -10,14 +10,15 @@ main(class=mainClass)
         each val, index in movies
           li
             h3 #{val.title} (#{val.year})
-            p #{val.genres}
-            p #{val.director}
-            p #{val.plot}
-            p #{val.runtime}
-            p #{val.rating}
             img(src=val.poster, alt="Poster of " + val.title)
+            p(class="genre") <strong>Genre: </strong> #{val.genre}
+            p(class="director") <strong>Director: </strong> #{val.director}
+            p(class="plot") <strong>Plot: </strong> #{val.plot}
+            p(class="runtime") <strong>Runtime: </strong> #{val.runtime}
+            p(class="rating") <strong>Rating: </strong> #{val.rating}
+            div(class="remove")
+              button(name="removeMovie") Remove 
             input(type="hidden" name="movieID" value=val.id)
-            button(name="removeMovie") Remove 
       else
         li(id="noMovies") No movies yet
   div(class="watchlistAdd")
