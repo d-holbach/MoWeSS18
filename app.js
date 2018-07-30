@@ -23,7 +23,7 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
 app.set('views', path.join(__dirname, 'views'));
-app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public'),  { maxAge: 31557600000 }));
 app.set('view engine', 'pug');
 app.use(session({ 
   secret: 'mowe18',
