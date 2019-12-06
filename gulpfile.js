@@ -16,7 +16,7 @@ gulp.task('compress', () => {
     .pipe(minify())
     .pipe(gulp.dest('./public/scripts/min'))
 });
- 
+
 gulp.task('watch', ['sass', 'compress'], () => {
   gulp.watch('./sass/**/*.scss', ['sass']);
   nodemon({
@@ -34,3 +34,5 @@ gulp.task('watch', ['sass', 'compress'], () => {
     ]
   })
 });
+
+gulp.task('default', ['sass', 'compress']);
