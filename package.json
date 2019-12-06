@@ -9,10 +9,10 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
-    "dotenv": "^6.0.0",
+    "dotenv": "^8.2.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "nano": "^6.4.4",
+    "nano": "^8.1.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pug": "^2.0.3",
@@ -21,8 +21,8 @@
     "shortid": "^2.2.12"
   },
   "devDependencies": {
-    "eslint": "^5.1.0",
-    "eslint-plugin-node": "^6.0.1",
+    "eslint": "^6.7.2",
+    "eslint-plugin-node": "^10.0.0",
     "gulp": "^3.9.1",
     "gulp-minify": "^3.1.0",
     "gulp-nodemon": "^2.2.1",
